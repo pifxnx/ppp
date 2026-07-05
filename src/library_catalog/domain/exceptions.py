@@ -38,10 +38,17 @@ class InvalidPagesException(AppException):
 
 
 class OpenLibraryException(AppException):
+    '''Ошибка Open Library API'''
+    def __init__(self, message: str):
+        super().__init__(
+            message=f'Open Library API error: {message}',
+            status_code=503
+        )
+
+class OpenLibraryTimeoutException(OpenLibraryException):
     '''Таймаут при обращении к Open Library API'''
     def __init__(self, timeout: float):
         super().__init__(
             message=f'Open Library API timeout after {timeout}s',
             status_code=504
         )
-
