@@ -48,11 +48,16 @@ class OpenLibraryClient(BaseAPIClient):
                     'limit': 1
                 }
             )
-        docs = data.get('docs', [])
-        if not docs:
-            return {}
-        
-        return self._extract_book_data(docs[0])
+            docs = data.get('docs', [])
+            if not docs:
+                return {}
+            
+            return self._extract_book_data(docs[0])
+        except httpx.TimeoutException:
+            raise OpenLibraryTimeoutException(self.timeout)
+        except httpx.HTTPError as e:
+            raise OpenLibraryException(str(e))
+    
 
     
     async def enrich(
@@ -62,7 +67,7 @@ class OpenLibraryClient(BaseAPIClient):
             isbn: str | None = None
     ) -> dict:
         if isbn:
-            data = await self.search_by_isbn(isbn):
+            data = await self.search_by_isbn(isbn)
             if data:
                 return data
             
