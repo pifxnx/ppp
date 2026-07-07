@@ -17,7 +17,7 @@ class BookCreate(BookBase):
     isbn: str | None = Field(None, min_length=10, max_length=500)
     description: str | None = Field(None, max_length=5000)
 
-    @field_validator
+    @field_validator('isbn')
     @classmethod
     def validate_isbn(cls, v: str | None) -> str | None:
         '''валидация isbn'''

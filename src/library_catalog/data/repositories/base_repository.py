@@ -15,7 +15,7 @@ class BaseRepository(Generic[T]):
         obj = self.model(**kwargs)
         self.session.add(obj)
         await self.session.commit()
-        await self.session.refresh()
+        await self.session.refresh(obj)
         return obj
 
 

@@ -1,4 +1,4 @@
-from base_repository import BaseRepository
+from .base_repository import BaseRepository
 from ..models.book import Book
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
