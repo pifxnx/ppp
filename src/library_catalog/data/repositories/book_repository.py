@@ -61,7 +61,7 @@ class BookRepository(BaseRepository[Book]):
         if available is not None:
             conditions.append(self.model.available == available)
 
-        query = select(func.count(self.model.id)).where(*conditions)
+        query = select(func.count(self.model.title)).where(*conditions)
         res = await self.session.execute(query)
         res = res.scalar()
         return res

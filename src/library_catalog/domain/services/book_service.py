@@ -96,7 +96,7 @@ class BookService:
             author=author,
             genre=genre,
             year=year,
-            avaiable=available,
+            available=available,
             limit=limit,
             offset=offset
         )
@@ -109,7 +109,7 @@ class BookService:
             available=available
         )
 
-        return BookMapper.to_show_books(books, total)
+        return BookMapper.to_show_books(books), total
     
     def _validate_book_data(self, data: BookCreate) -> None:
         '''Валидация бизнес правил для новой книги'''
