@@ -1,5 +1,6 @@
 from uuid import UUID
 from ..core.exceptions import AppException, NotFoundException
+from datetime import datetime
 
 
 class BookNotFoundException(NotFoundException):
@@ -22,7 +23,6 @@ class InvalidYearException(AppException):
     """Невалидный год издания"""
 
     def __init__(self, year: int):
-        from datetime import datetime
 
         current_year = datetime.now().year
         super().__init__(
