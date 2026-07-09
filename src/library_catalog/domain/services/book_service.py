@@ -2,7 +2,9 @@ from uuid import UUID
 from ...api.v1.schemas.book import BookCreate, BookUpdate, ShowBook
 from ...data.repositories.book_repository import BookRepository
 from ...external.openlibrary.client import OpenLibraryClient
-from ..exceptions import *
+from ..exceptions import (BookNotFoundException, BookAlreadyExistsException,
+                          InvalidPagesException, InvalidYearException,
+                          OpenLibraryException)
 from ..mappers.book_mapper import BookMapper
 
 
@@ -61,6 +63,10 @@ class BookService:
         existing = await self.book_repo.get_by_id(book_id)
         if existing is None:
             raise BookNotFoundException(book_id)
+        if book_data.isbn is not None:
+            existing = await self.book_repo.find_by_isbn(book_data.isbn)
+            if existing and existing.book_id != book_id:
+                raise BookAlreadyExistsException(book_data.isbn)
         
         if book_data.year is not None:
             self._validate_year(book_data.year)
@@ -69,7 +75,7 @@ class BookService:
 
         updated = await self.book_repo.update(
             book_id,
-            **book_data.dict(exclude_unset=True)
+            **book_data.model.dump(exclude_unset=True)
         )
         return BookMapper.to_show_book(updated)
     

@@ -62,6 +62,24 @@ class BookUpdate(BaseModel):
     isbn: str | None = None
     description: str | None = None
 
+    @field_validator('isbn')
+    @classmethod
+    def validate_isbn(cls, v: str | None) -> str | None:
+        '''валидация isbn'''
+        if v is None:
+            return v
+        
+        clean = v.replace('-', '').replace(' ', '')
+        
+        if not clean.replace('X', '').isdigit():
+            raise ValueError('isbn must contain only digits')
+        
+        if len(clean) not in (10, 13):
+            raise ValueError('isbn must be 10 or 13 digits')
+        
+        return v
+
+
 
 class ShowBook(BookBase):
     '''схема для отображения книги (response)'''

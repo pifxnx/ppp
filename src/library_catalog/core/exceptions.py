@@ -9,16 +9,16 @@ class AppException(Exception):
 
 
 class NotFoundException(AppException):
-    def __init__(self, recource, identifier):
-        self.recource = recource
+    def __init__(self, resource, identifier):
+        self.resource = resource
         self.identifier = identifier
-        
+
 
 def register_exception_handlers(app: FastAPI) -> None:
-    '''Зарегистрировать обработчики исключений'''
+    """Зарегистрировать обработчики исключений"""
+
     @app.exception_handler(AppException)
     async def app_exception_handler(request: Request, exc: AppException):
         return JSONResponse(
-            status_code=exc.status_code,
-            content={'detail': exc.message}
+            status_code=exc.status_code, content={"detail": exc.message}
         )
